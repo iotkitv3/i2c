@@ -621,13 +621,51 @@ Für Details siehe [Datenblatt](https://www.mouser.ch/datasheet/2/783/BST-BMP18
 
 ### Beispiel(e)
 
-**Compilieren**
+<details><summary>main.cpp</summary>  
 
-| Umgebung/Board    | Link/Befehl                      |
-| ----------------- | -------------------------------- |
-| Online Compiler | [BMP180Sensor](https://os.mbed.com/compiler/#import:/teams/IoTKitV3/code/BMP180Sensor/) |
-| CLI (nucleo_f303re) | `mbed compile -m nucleo_f303re -f --source . --source ../IoTKitV3/i2c/BMP180` |
+    /**
+     * Bosch BMP180 Digital Pressure Sensor
+     *
+     * Der Sensor liefert keinen Wert fuer Luftfeuchtigkeit, deshalb wird der Luftdruck in kPa geliefert.
+     */
+    
+    #include "mbed.h"
+    #include <BMP180Wrapper.h>
+    #include "OLEDDisplay.h"
+    
+    // UI
+    OLEDDisplay oled( MBED_CONF_IOTKIT_OLED_RST, MBED_CONF_IOTKIT_OLED_SDA, MBED_CONF_IOTKIT_OLED_SCL );
+    
+    static DevI2C devI2c( MBED_CONF_IOTKIT_I2C_SDA, MBED_CONF_IOTKIT_I2C_SCL );
+    static BMP180Wrapper hum_temp(&devI2c);
+    
+    int main()
+    {
+        uint8_t id;
+        float value1, value2;
+    
+        oled.clear();
+        oled.printf( "Temp/Pressure Sensor\n" );
+    
+        /* Init all sensors with default params */
+        hum_temp.init(NULL);
+        hum_temp.enable();
+    
+        hum_temp.read_id(&id);
+        printf("humidity & air pressure    = 0x%X\r\n", id);
+    
+        while (true)
+        {
+            hum_temp.get_temperature(&value1);
+            hum_temp.get_humidity(&value2);
+            printf("BMP180:  [temp] %.2f C, [kPa]   %.2f%%\r\n", value1, value2);
+            oled.cursor( 1, 0 );
+            oled.printf( "temp: %3.2f\nkPa : %3.2f", value1, value2 );
+            thread_sleep_for( 1000 );
+        }
+    }
 
+</p></details>
 
 ## ADPS9930
 ***
@@ -645,20 +683,6 @@ Für Details siehe [Datenblatt](http://www.makerfabs.com/desfile/files/APDS-993
 
 ### Beispiel(e)
 
+...
 
-| Umgebung/Board    | Link/Befehl                      |
-| ----------------- | -------------------------------- |
-| Online Compiler | folgt |
-| CLI (nucleo_f303re) | folgt |
-
-## Übungen
-***
-
-> [⇧ **Nach oben**](#beispiele)
-
-| Übung                     | Lösung       |
-| ------------------------- | ------------ |
-| **6D Lagesensor und Servo** steuert mit dem 6 Lagensensor die Position des Servos<br>**Anwendungen**: Ausgleich der Lage z.B. bei einem Zug. | [Lösung](01-Uebung/src/main.cpp) |
-| **6D Lagsensor und Schrittmotor** bringt mit dem 6 Lagesensor den ersten oder zweiten Schrittmotor vor- oder rückwärts zum laufen. | [Lösung](02-Uebung/src/main.cpp) |
-| **Abstandssensor und Motor** Motor Geschwindigkeit anhand des Abstandes zum Abstandssensor setzen. Wie näher desto schneller. | [Lösung](03-Uebung/src/main.cpp) | 
 
