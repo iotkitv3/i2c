@@ -458,14 +458,82 @@ Das Modul ist für den Betrieb mit geringer Leistung ausgelegt. Entfernungs- und
 
 ### Beispiel(e)
 
-Das Beispiel [VL6180X](VL6180X/src/main.cpp) zeigt die Lichtstärke in LUX und die Entfernung eines Gegenstandes, z.B. der Hand, zum VL6180X an.
+Das Beispiel VL6180X zeigt die Lichtstärke in LUX und die Entfernung eines Gegenstandes, z.B. der Hand, zum VL6180X an.
 
-**Compilieren**
+<details><summary>main.cpp</summary>  
 
-| Umgebung/Board    | Link/Befehl                      |
-| ----------------- | -------------------------------- |
-| Online Compiler | [VL6180X nur IoTKit K64F](https://os.mbed.com/compiler/#import:/teams/IoTKitV3/code/VL6180X/) |
-| CLI (IoTKit K64F) | `mbed compile -m K64F --source . --source ../IoTKitV3/i2c/VL6180X; ` <br> `cp BUILD/K64F/GCC_ARM/template.bin $DAPLINK` |
+    /**
+     * Infrarot Abstand- und Licht-Sensor
+     *
+     * Abstand-Sensor geht offiziell bis 100 mm
+     */
+    
+    #include "mbed.h"
+    #include <VL6180x.h>
+    
+    #define VL6180X_ADDRESS 0x52
+    
+    VL6180xIdentification identification;
+    // mbed uses 8bit addresses shift address by 1 bit left
+    VL6180x sensor( PTE0, PTE1, VL6180X_ADDRESS);
+    // enable, verhindert Init Fehler
+    DigitalOut sensor_ce( PTE3 );
+    
+    void printIdentification(struct VL6180xIdentification *temp)
+    {
+        printf("Model ID = ");
+        printf("%d\n",temp->idModel);
+    
+        printf("Model Rev = ");
+        printf("%d",temp->idModelRevMajor);
+        printf(".");
+        printf("%d\n",temp->idModelRevMinor);
+    
+        printf("Module Rev = ");
+        printf("%d",temp->idModuleRevMajor);
+        printf(".");
+        printf("%d\n",temp->idModuleRevMinor);
+    
+        printf("Manufacture Date = ");
+        printf("%d",((temp->idDate >> 3) & 0x001F));
+        printf("/");
+        printf("%d",((temp->idDate >> 8) & 0x000F));
+        printf("/1");
+        printf("%d\n",((temp->idDate >> 12) & 0x000F));
+        printf(" Phase: ");
+        printf("%d\n",(temp->idDate & 0x0007));
+    
+        printf("Manufacture Time (s)= ");
+        printf("%d\n",(temp->idTime * 2));
+        printf("\n\n");
+    }
+    
+    int main()
+    {
+        sensor_ce = 1;
+        sensor.getIdentification(&identification); // Retrieve manufacture info from device memory
+        printIdentification(&identification); // Helper function to print all the Module information
+    
+        if(sensor.VL6180xInit() != 0) {
+            printf("FAILED TO INITALIZE\n"); //Initialize device and check for errors
+        };
+        sensor.VL6180xDefautSettings(); //Load default settings to get started.
+    
+        thread_sleep_for(1000); // delay 1s
+    
+        while(1) 
+        {
+            //Get Ambient Light level and report in LUX
+            printf("Ambient Light Level (Lux) = %f\n",sensor.getAmbientLight(GAIN_1) );
+    
+            //Get Distance and report in mm
+            printf("Distance measured (mm) = %d\n", sensor.getDistance() );
+    
+            thread_sleep_for( 500 );
+        }
+    }
+
+</p></details>
 
 ### Links
 
@@ -484,14 +552,53 @@ Es misst absolute Distanzen bis zu 2 m und setzt damit neue Maßstäbe in Bezug 
 
 ### Beispiel(e)
 
-Das Beispiel [VL53L0X](VL53L0X/src/main.cpp) zeigt die Entfernung eines Gegenstandes, z.B. der Hand, zum VL53L0X an.
+Das Beispiel VL53L0X zeigt die Entfernung eines Gegenstandes, z.B. der Hand, zum VL53L0X an.
 
-**Compilieren**
+<details><summary>main.cpp</summary>  
 
-| Umgebung/Board    | Link/Befehl                      |
-| ----------------- | -------------------------------- |
-| Online Compiler | [VL53L0X](https://os.mbed.com/compiler/#import:/teams/IoTKitV3/code/VL53L0X/) |
-| CLI (DISCO_L475VG_IOT01A) | `mbed compile -m DISCO_L475VG_IOT01A -f --source . --source ../IoTKitV3/i2c/VL53L0X` |
+    /** Veraendert die Helligkeit je nach Abstand von VL53L0X
+     */
+    #include "mbed.h"
+    
+    // DigitalIn button( USER_BUTTON1 );
+    // DigitalOut buzzer( D3 );
+    
+    // Sensoren
+    #include "VL53L0X.h"
+    
+    DevI2C devI2c( PB_11, PB_10 );
+    DigitalOut shutdown_pin( PC_6 );
+    VL53L0X range( &devI2c, &shutdown_pin, PC_7 );
+    PwmOut led1( LED2 );
+    
+    /**
+     *  Hauptprogramm
+     */
+    int main()
+    {
+        range.init_sensor( VL53L0X_DEFAULT_ADDRESS );
+        led1 = 0.0f;
+    
+        while ( true )
+        {
+            uint32_t distance;
+            int status = range.get_distance( &distance );
+            // Methode macht keinen Check ob Sensore Ready, deshalb nur gueltige Werte auswerten
+            if ( status == VL53L0X_ERROR_NONE )
+            {
+                printf( "VL53L0X [mm]:            %6ld\r\n", distance );
+                led1 = distance * 0.0005;
+    
+            }
+            else
+            {
+                printf( "VL53L0X [mm]:                --\r\n" );
+            }
+            thread_sleep_for( 100 );
+        }
+    }
+
+</p></details>
 
 ### Links
 

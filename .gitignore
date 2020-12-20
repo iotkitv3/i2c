@@ -35,7 +35,7 @@ BUILD
 mbed-os
 iotkit
 HTS221
-VL53L0X
-VL6180x
 LIS3MDL
 lsm6dsl
+vl6180x
+vl53l0x
