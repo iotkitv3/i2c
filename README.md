@@ -1,9 +1,9 @@
 ## I²C/TWI (Inter-Integrated Circuit, bzw. Two-Wire-Interface)
 ***
 
-> [⇧ **Home**](https://github.com/iotkitv4/intro)
+> [⇧ **Home**](https://github.com/iotkitv3/intro)
 
-![](https://raw.githubusercontent.com/iotkitv4/intro/main/images/I2C.png) 
+![](https://raw.githubusercontent.com/iotkitv3/intro/main/images/I2C.png) 
 
 [I²C-Bus mit einem Master und drei Slaves](http://de.wikipedia.org/wiki/I%C2%B2C)
 
