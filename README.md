@@ -50,7 +50,7 @@ Der Bus braucht zur Terminierung zwei Widerstände von ca. 2.2K - 4.7K Ohm (je n
 **Verfügbar auf dem IoTKit V3 (small)**
 
 * [BMP180](#bmp180)
-* [APDS9930](#APDS9930)
+* [APDS-9960](#APDS-9960)
 
 ## HTS221
 ***
@@ -667,14 +667,14 @@ Für Details siehe [Datenblatt](https://www.mouser.ch/datasheet/2/783/BST-BMP18
 
 </p></details>
 
-## ADPS9930
+## APDS-9960
 ***
 
-Der APDS-9930 von [Broadcom](https://www.digikey.ch/de/supplier-centers/b/broadcom) ist ein digitaler, I²C-kompatibler Umgebungslichtsensor (ALS) und Näherungssensor mit IR-LED.
+Der APDS-9960 ist ein RGB- und Gestensensor, der Umgebungslicht- und Farbmessung, Näherungserkennung und berührungslose Gestenerkennung bietet. 
 
-Der APDS-9930 kann Objekte bis 100mm erfassen. Er erkennt Bewegungen links, rechts, nah, fern.
+Mit diesem RGB- und Gestensensor können Sie einen Computer, einen Mikrocontroller, einen Roboter und mehr mit einem einfachen Handgriff steuern! 
 
-Für Details siehe [Datenblatt](http://www.makerfabs.com/desfile/files/APDS-9930_2015-11-13.pdf).
+Dies ist derselbe Sensor, den das Samsung Galaxy S5 verwendet, und wahrscheinlich einer der besten Gestensensoren auf dem Markt für den Preis.
 
 ### Anwendungen 
 
@@ -683,6 +683,62 @@ Für Details siehe [Datenblatt](http://www.makerfabs.com/desfile/files/APDS-993
 
 ### Beispiel(e)
 
-...
+<details><summary>main.cpp</summary>  
 
+    #include "mbed.h"
+    #include "glibr.h"
+     
+    glibr GSensor( D14, D15 );
+     
+    int main()
+    {
+        if ( GSensor.ginit() ) {
+            printf("APDS-9960 initialization complete\n\r");
+        } else {
+            printf("Something went wrong during APDS-9960 init\n\r");
+        }
+     
+        // Start running the APDS-9960 gesture sensor engine
+        if ( GSensor.enableGestureSensor(true) ) {
+            printf("Gesture sensor is now running\n\r");
+        } else {
+            printf("Something went wrong during gesture sensor init!\n\r");
+        }
+    
+        while(1) 
+        {
+            if ( GSensor.isGestureAvailable() )
+             {
+                switch ( GSensor.readGesture() ) 
+                {
+                    case DIR_UP:
+                        printf("UP\n");
+                        break;
+                    case DIR_DOWN:
+                        printf("DOWN\n");
+                        break;
+                    case DIR_LEFT:
+                        printf("LEFT\n");
+                        break;
+                    case DIR_RIGHT:
+                        printf("RIGHT\n");
+                        break;
+                    case DIR_NEAR:
+                        printf("NEAR\n");
+                        break;
+                    case DIR_FAR:
+                        printf("FAR\n");
+                        break;
+                    default:
+                        printf("NONE\n");
+                }
+            }
+            thread_sleep_for( 10 );
+        }
+    }
 
+</p></details>
+
+### Links
+
+* [Produktseite](https://www.sparkfun.com/products/12787)
