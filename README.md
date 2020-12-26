@@ -741,4 +741,6 @@ Dies ist derselbe Sensor, den das Samsung Galaxy S5 verwendet, und wahrscheinlic
 
 ### Links
 
+* [APDS-9960 Datenblatt](https://cdn.sparkfun.com/assets/learn_tutorials/3/2/1/Avago-APDS-9960-datasheet.pdf)
+* [APDS-9960 RGB and Gesture Sensor Hookup Guide](https://learn.sparkfun.com/tutorials/apds-9960-rgb-and-gesture-sensor-hookup-guide)
 * [Produktseite](https://www.sparkfun.com/products/12787)
