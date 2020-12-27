@@ -1,4 +1,8 @@
+
 #include "mbed.h"
+#if defined(TARGET_NUCLEO_F303RE) || defined (TARGET_NUCLEO_F746ZG)
+#include "BMP180Wrapper.h"
+#endif
 #include "HTS221Sensor.h"
 #include "OLEDDisplay.h"
 
@@ -6,7 +10,11 @@
 OLEDDisplay oled( MBED_CONF_IOTKIT_OLED_RST, MBED_CONF_IOTKIT_OLED_SDA, MBED_CONF_IOTKIT_OLED_SCL );
 
 static DevI2C devI2c( MBED_CONF_IOTKIT_I2C_SDA, MBED_CONF_IOTKIT_I2C_SCL );
+#if defined(TARGET_NUCLEO_F303RE) || defined (TARGET_NUCLEO_F746ZG)
+static BMP180Wrapper hum_temp( &devI2c );
+#else
 static HTS221Sensor hum_temp(&devI2c);
+#endif
 
 int main()
 {
