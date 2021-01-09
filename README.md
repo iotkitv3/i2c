@@ -685,10 +685,22 @@ Dies ist derselbe Sensor, den das Samsung Galaxy S5 verwendet, und wahrscheinlic
 
 <details><summary>main.cpp</summary>  
 
+
     #include "mbed.h"
     #include "glibr.h"
-     
+    #include "OLEDDisplay.h"
+    #include "Motor.h"
+    #include "Servo.h"
+    
+    // UI
+    OLEDDisplay oled( MBED_CONF_IOTKIT_OLED_RST, MBED_CONF_IOTKIT_OLED_SDA, MBED_CONF_IOTKIT_OLED_SCL );
+    
+    // Sensor(en) 
     glibr GSensor( D14, D15 );
+    
+    // Aktore(n)
+    Motor m2( MBED_CONF_IOTKIT_MOTOR2_PWM, MBED_CONF_IOTKIT_MOTOR2_FWD, MBED_CONF_IOTKIT_MOTOR2_REV ); // PWM, Vorwaerts, Rueckwarts
+    Servo servo2 ( MBED_CONF_IOTKIT_SERVO2 );
      
     int main()
     {
@@ -704,33 +716,49 @@ Dies ist derselbe Sensor, den das Samsung Galaxy S5 verwendet, und wahrscheinlic
         } else {
             printf("Something went wrong during gesture sensor init!\n\r");
         }
+        servo2 = 0.5f;
+        m2.speed( 0.0f );
+        oled.clear();
+        oled.printf( "Gesture sensor " );
     
         while(1) 
         {
             if ( GSensor.isGestureAvailable() )
              {
+                oled.cursor( 1, 0 );
                 switch ( GSensor.readGesture() ) 
                 {
                     case DIR_UP:
-                        printf("UP\n");
+                        oled.printf("UP   ");
+                        m2.speed( 0.8f );
                         break;
                     case DIR_DOWN:
-                        printf("DOWN\n");
+                        oled.printf("DOWN ");
+                        m2.speed( -0.8f );                    
                         break;
                     case DIR_LEFT:
-                        printf("LEFT\n");
+                        oled.printf("LEFT ");
+                        servo2 = 0.8f;
                         break;
                     case DIR_RIGHT:
-                        printf("RIGHT\n");
+                        oled.printf("RIGHT");
+                        servo2 = 0.2f;
                         break;
                     case DIR_NEAR:
-                        printf("NEAR\n");
+                        oled.printf("NEAR ");
+                        servo2 = 0.5f;
+                        m2.speed( 0.0f );
                         break;
                     case DIR_FAR:
-                        printf("FAR\n");
+                        oled.printf("FAR  ");
+                        servo2 = 0.5f;
+                        m2.speed( 0.0f );
                         break;
                     default:
-                        printf("NONE\n");
+                        oled.printf("NONE ");
+                        servo2 = 0.5f;
+                        m2.speed( 0.0f );                
+                        break;
                 }
             }
             thread_sleep_for( 10 );
