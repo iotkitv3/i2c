@@ -67,6 +67,7 @@ Das Beispiel [HTS221](main.cpp) gibt Temperatur und Luftfeuchtigkeit aus.
 
 ### Links
 
+* [Library](https://os.mbed.com/teams/ST/code/HTS221/)
 * [Produktseite](https://www.st.com/en/mems-and-sensors/hts221.html)
 
 ## LIS3MDL
@@ -155,6 +156,7 @@ Das Beispiel LIS3MDL erkennt den Nord- oder Südpool eines Magneten und fungiert
 
 ### Links
 
+* [Library](https://os.mbed.com/teams/ST/code/LIS3MDL/)
 * [Produktseite](https://www.st.com/en/mems-and-sensors/lis3mdl.html)
 
 ## LSM6DSL
@@ -440,6 +442,7 @@ Erkennt wenn jemand auf das Board tippt.
 
 ### Links
 
+* [Library](https://github.com/iotkitv3/LSM6DSL)
 * [Produktseite](https://www.st.com/en/mems-and-sensors/hts221.html)
 * [Weitere Beispiele](https://github.com/stm32duino/LSM6DSL/tree/master/examples)
 
@@ -537,6 +540,7 @@ Das Beispiel VL6180X zeigt die Lichtstärke in LUX und die Entfernung eines Gege
 
 ### Links
 
+* [Library](https://github.com/iotkitv3/VL6180x)
 * [Produktseite](https://www.st.com/en/imaging-and-photonics-solutions/vl6180x.html)
 
 ## VL53L0X
@@ -602,6 +606,7 @@ Das Beispiel VL53L0X zeigt die Entfernung eines Gegenstandes, z.B. der Hand, zum
 
 ### Links
 
+* [Library](https://github.com/iotkitv3/VL53L0X)
 * [Produktseite](https://www.st.com/en/imaging-and-photonics-solutions/vl53l0x.html)
 
 ## BMP180
@@ -666,6 +671,10 @@ Für Details siehe [Datenblatt](https://www.mouser.ch/datasheet/2/783/BST-BMP18
     }
 
 </p></details>
+
+### Links
+
+* [Library](https://github.com/iotkitv3/BMP180)
 
 ## APDS-9960
 ***
@@ -769,6 +778,7 @@ Dies ist derselbe Sensor, den das Samsung Galaxy S5 verwendet, und wahrscheinlic
 
 ### Links
 
+* [Library](https://github.com/iotkitv3/APDS-9960)
 * [APDS-9960 Datenblatt](https://cdn.sparkfun.com/assets/learn_tutorials/3/2/1/Avago-APDS-9960-datasheet.pdf)
 * [APDS-9960 RGB and Gesture Sensor Hookup Guide](https://learn.sparkfun.com/tutorials/apds-9960-rgb-and-gesture-sensor-hookup-guide)
 * [Produktseite](https://www.sparkfun.com/products/12787)
